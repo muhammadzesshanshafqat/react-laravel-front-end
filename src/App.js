@@ -20,6 +20,7 @@ export default class App extends Component {
   
 
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleSignup = this.handleSignup.bind(this)
   }
 
   componentDidMount() {
@@ -29,7 +30,7 @@ export default class App extends Component {
             user: {
               id: userData.user.id,
               email: userData.user.email,
-              name: userData.user.name,
+              name: userData.user.name
             },
             token: userData.token
         });
@@ -45,6 +46,12 @@ export default class App extends Component {
     }
   }
 
+  handleSignup(responseData) {
+    this.setState({
+      email: responseData.email
+    });
+  }
+
   handleLogin(responseData) {
     this.setState({
       user: {
@@ -52,7 +59,7 @@ export default class App extends Component {
         email: responseData.email,
         name: responseData.name
       },
-      token: responseData.access_token 
+      token: responseData.access_token
     });
     localStorage.setItem('localUserData', JSON.stringify(this.state));
   }
@@ -74,7 +81,7 @@ export default class App extends Component {
                   </li>
                   <li className="nav-item">
                     <a  href={'http://127.0.0.1/api/auth/redirect'} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
-                  </li>              
+                  </li>         
                 </ul>
               </div>
             </div>
@@ -85,7 +92,7 @@ export default class App extends Component {
               <Switch>
                 <Route exact path='/' component={Login} />
                 <Route exact path="/log-in"  render={(props) => <Login {...props} onLogin={this.handleLogin} />}/>
-                <Route exact path="/sign-up" component={SignUp} />
+                <Route exact path="/sign-up" render={(props, history) => <SignUp {...props} onSignup={this.handleSignup} history={history} />}/>
               </Switch>
             </div>
           </div>
