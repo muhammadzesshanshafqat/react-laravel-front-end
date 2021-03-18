@@ -25,7 +25,7 @@ function App() {
                   <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link">Log In with Google</a>
+                  <a  href={'http://127.0.0.1/api/auth/redirect'} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
                 </li>              
               </ul>
             </div>
