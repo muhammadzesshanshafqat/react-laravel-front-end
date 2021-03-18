@@ -36,6 +36,7 @@ export default class Login extends Component {
           .then((response) => {
             const responseData = response.data;
             this.props.onLogin(responseData);
+            window.location.href = "/posts";
           })
           .catch((error) => {
             console.log(error);
