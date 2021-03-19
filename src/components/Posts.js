@@ -36,7 +36,7 @@ export default class Posts extends Component {
         }).then((responseData) => {
             this.setState({
                 posts: responseData.data,
-                loadingPosts: false,
+                loadingPosts: false
             });
         });
     }
@@ -45,16 +45,14 @@ export default class Posts extends Component {
         const noPosts = !this.state.loadingPosts && this.state.posts.length === 0;
         const loadingPosts = this.state.loadingPosts;
         return(
-            <div style={{height: "100%"}}>
-                <div>
-                    <ul style={{overflowY:"scroll"}}>
-                        {loadingPosts && <div>Loading posts...</div>}
-                        {noPosts && <div>You do not have any posts.</div>}
-                        {this.state.posts.map((post, index) => {
-                            return <Post key={index} post={post}/>;
-                        })}
-                    </ul>
-                </div>
+            <div style={{textAlign: "center"}}>
+                <ul>
+                    {loadingPosts && <div style={{position: "absolute" , right: "480px", top: "349px"}}>Loading posts...</div>}
+                    {noPosts && <div style={{position: "absolute" , right: "432px", top: "349px"}}>You do not have any posts.</div>}
+                    {this.state.posts.map((post, index) => {
+                        return <Post key={index} post={post} style={{backgroundColor: "white"}}/>;
+                    })}
+                </ul>
             </div>
 
            

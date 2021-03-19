@@ -18,7 +18,7 @@ export default class Post extends Component {
     render() {
         return(
             <div>
-                <h3>Title: {this.state.postTitle}</h3>
+                <h3 style={{textAlign: "left"}}>Title: {this.state.postTitle}</h3>
                 <p>Description: {this.state.postDescription}</p>
                 <p>Number of attachments: {this.state.files.length}</p>
                 {this.state.files.map((file)=>{
