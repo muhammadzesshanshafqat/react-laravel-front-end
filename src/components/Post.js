@@ -19,12 +19,13 @@ export default class Post extends Component {
         return(
             <div>
                 <h3 style={{textAlign: "left"}}>Title: {this.state.postTitle}</h3>
-                <p>Description: {this.state.postDescription}</p>
-                <p>Number of attachments: {this.state.files.length}</p>
+                <p style={{textAlign: "left"}}>Description: {this.state.postDescription}</p>
+                <p style={{textAlign: "left"}}>Attachments: {this.state.files.length}</p>
                 {this.state.files.map((file)=>{
                     console.log('file: ', file);
                     return <img src={`'http://127.0.0.1/${file.url}`} alt="image"  />
                 })}
+                <hr />
             </div>
         )
     }
