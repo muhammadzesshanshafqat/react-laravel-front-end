@@ -87,12 +87,12 @@ export default class CreatePost extends Component {
             <form onSubmit={this.handleSubmit}>
             <h3>Create Post</h3>
 
-            <div className="form-group">
+            <div className="form-group" style={{textAlign: "left"}}>
                 <label>Title</label>
                 <input type="text" value={this.state.title} onChange={this.handleTitleChange} className="form-control" placeholder="Enter title for post" />
             </div>
 
-            <div className="form-group">
+            <div className="form-group" style={{textAlign: "left"}}>
                 <label>Description</label>
                 <input type="text" value={this.state.description} onChange={this.handleDescriptionChange} className="form-control" placeholder="Enter description for post" />
             </div>
