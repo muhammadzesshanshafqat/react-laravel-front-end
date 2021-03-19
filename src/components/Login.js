@@ -7,7 +7,8 @@ export default class Login extends Component {
         this.state = {
             email: '',
             password: '',
-            rememberMe: false
+            rememberMe: false,
+            incorrectCredentials: false
         };
     
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -27,7 +28,9 @@ export default class Login extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-
+        this.setState({
+            incorrectCredentials: false
+        })
         axios.post('http://127.0.0.1/api/auth/login', {
             email: this.state.email,
             password: this.state.password,
@@ -39,6 +42,9 @@ export default class Login extends Component {
             window.location.href = "/posts";
           })
           .catch((error) => {
+            this.setState({
+                incorrectCredentials: true
+            })
             console.log(error);
           });
     }
@@ -66,6 +72,7 @@ export default class Login extends Component {
             </div>
 
             <button type="submit" className="btn btn-primary btn-block">Submit</button>
+            {this.state.incorrectCredentials && <p style={{color: "red"}}>Credentials incorrect. Please try again.</p>}
         </form>
         );
     }
