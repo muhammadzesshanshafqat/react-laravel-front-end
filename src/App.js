@@ -83,7 +83,6 @@ export default class App extends Component {
   }
 
   handleLogout() {
-    console.log("user: ", this.state.user)
     const config = {
       headers: { Authorization: `Bearer ${this.state.token}` }
     };
@@ -161,7 +160,7 @@ export default class App extends Component {
 
                   { !this.state.token 
                       ? <li className="nav-item">
-                          <a href='http://127.0.0.1/api/auth/redirect' style={{cursor: "pointer"}} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
+                          <a href='http://127.0.0.1/api/auth/redirect' style={{cursor: "pointer"}} className="nav-link">Log In with Google</a>
                         </li>
                       : null
                   }
@@ -193,9 +192,11 @@ export default class App extends Component {
           </nav>
 
           <div className="auth-wrapper" style={{textAlign: "center"}}>
-            <div className="auth-inner" >
+            <div className="auth-inner">
               <Switch>
-                <Route exact path='/'exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />} />
+                <Route exact path='/' render={(props, history) => {
+                  return (this.state.token) ? <Posts {...props} getUser={this.getUser} /> : <Login {...props} onLogin={this.handleLogin} history={history} />;
+                }}/>
                 <Route exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />}/>
                 <Route exact path="/sign-up" render={(props, history) => <SignUp {...props} onSignup={this.handleSignup} history={history} />}/>
                 <Route exact path='/posts'render={(props) => <Posts {...props} getUser={this.getUser} />}/>
