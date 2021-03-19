@@ -11,18 +11,20 @@ export default class Posts extends Component {
         }
 
         this.getPostsForUser = this.getPostsForUser.bind(this);
-    }
+    } 
 
     componentDidMount() {
         const userData = JSON.parse(localStorage.getItem('localUserData'));
         this.setState({
             user: userData.user
         });
-        this.getPostsForUser(userData.user.id);
+
+        if(userData) {
+            this.getPostsForUser(userData.user.id);
+        }
     }
 
     getPostsForUser(userId) {
-        console.log("userId: ", userId);
         return axios.get('http://127.0.0.1/api/posts', {
             params: {
                 userId: userId
@@ -37,12 +39,23 @@ export default class Posts extends Component {
     render() {
         const noPosts = this.state.posts.length === 0;
         return(
-            <ul>
-                {noPosts && <div>You do not have any posts.</div>}
-                {this.state.posts.map((post, index) => {
-                    return <Post key={index} post={post}/>;
-                })}
-            </ul>
+            <div>
+                <ul>
+                    {noPosts && <div>You do not have any posts.</div>}
+                    {this.state.posts.map((post, index) => {
+                        return <Post key={index} post={post}/>;
+                    })}
+                </ul>
+                {/* <button
+                    className="center-text btn btn-lg btn-danger center modal-button"
+                    onClick={this.showModal}
+                    >
+                    Create Post
+                </button> */}
+            </div>
+
+           
+
         );
     }
 }
