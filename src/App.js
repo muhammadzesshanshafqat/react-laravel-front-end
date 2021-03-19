@@ -30,7 +30,6 @@ export default class App extends Component {
     this.clearState=this.clearState.bind(this);
     this.handleCreatePost = this.handleCreatePost.bind(this);
     this.showMyPosts = this.showMyPosts.bind(this);
-    this.loginWithGoogle = this.loginWithGoogle.bind(this);
   }
 
   componentDidMount() {
@@ -83,7 +82,6 @@ export default class App extends Component {
     localStorage.setItem('localUserData', JSON.stringify(this.state));
   }
 
-  //fix logout
   handleLogout() {
     console.log("user: ", this.state.user)
     const config = {
@@ -137,15 +135,6 @@ export default class App extends Component {
   getUser() {
     return this.state.user;
   }
-
-  loginWithGoogle() {
-    axios.get('http://127.0.0.1/api/auth/redirect')
-      .then((response) => {
-        console.log('response', response);
-        window.location.href = response.data.url;
-      })
-  }
-  
   
   render() {
     return (
@@ -153,7 +142,7 @@ export default class App extends Component {
         <div className="App">
           <nav className="navbar navbar-expand-lg navbar-light fixed-top">
             <div className="container">
-              <Link className="navbar-brand" to={"/sign-in"}>Laravel-Task</Link>
+              <Link className="navbar-brand">Laravel-Task</Link>
               <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul className="navbar-nav ml-auto">
                   { !this.state.token 
@@ -172,7 +161,7 @@ export default class App extends Component {
 
                   { !this.state.token 
                       ? <li className="nav-item">
-                          <a onClick={this.loginWithGoogle} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
+                          <a href='http://127.0.0.1/api/auth/redirect' style={{cursor: "pointer"}} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
                         </li>
                       : null
                   }
@@ -203,8 +192,8 @@ export default class App extends Component {
             </div>
           </nav>
 
-          <div className="auth-wrapper" style={{height: "100%", overflowY:"scroll"}}>
-            <div className="auth-inner">
+          <div className="auth-wrapper" style={{textAlign: "center"}}>
+            <div className="auth-inner" >
               <Switch>
                 <Route exact path='/'exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />} />
                 <Route exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />}/>
