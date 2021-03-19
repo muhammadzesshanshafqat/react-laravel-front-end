@@ -6,6 +6,7 @@ import Login from './components/Login';
 import SignUp from './components/Signup';
 import Posts from './components/Posts';
 import axios from 'axios';
+import CreatePost from './components/CreatePost';
 
 export default class App extends Component {
   constructor(props) {
@@ -27,6 +28,9 @@ export default class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.getUser=this.getUser.bind(this);
     this.clearState=this.clearState.bind(this);
+    this.handleCreatePost = this.handleCreatePost.bind(this);
+    this.showMyPosts = this.showMyPosts.bind(this);
+    this.loginWithGoogle = this.loginWithGoogle.bind(this);
   }
 
   componentDidMount() {
@@ -85,7 +89,7 @@ export default class App extends Component {
     const config = {
       headers: { Authorization: `Bearer ${this.state.token}` }
     };
-    
+
     axios.post('http://127.0.0.1/api/auth/logout', {
       id: this.state.user.id,
       name: this.state.user.name,
@@ -122,9 +126,26 @@ export default class App extends Component {
     });
   }
 
+  handleCreatePost() {
+    window.location.href = '/create-post';
+  }
+
+  showMyPosts() {
+    window.location.href = '/posts'
+  }
+
   getUser() {
     return this.state.user;
   }
+
+  loginWithGoogle() {
+    axios.get('http://127.0.0.1/api/auth/redirect')
+      .then((response) => {
+        console.log('response', response);
+        window.location.href = response.data.url;
+      })
+  }
+  
   
   render() {
     return (
@@ -151,14 +172,28 @@ export default class App extends Component {
 
                   { !this.state.token 
                       ? <li className="nav-item">
-                          <a  href={'http://127.0.0.1/api/auth/redirect'} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
+                          <a onClick={this.loginWithGoogle} className="nav-link">Log In with Google<i className="fab fa-google"></i></a>
                         </li>
                       : null
                   }
                 
                   { this.state.token 
-                      ? <li className="nav-item">
-                          <button className="nav-link" onClick={this.handleLogout}>Logout</button>
+                      ? <li className="nav-item" style={{margin: "2px"}}>
+                          <button style={{color: 'white'}} className="nav-link btn btn-primary btn-block" onClick={this.handleLogout}>Logout</button>
+                        </li>
+                      : null
+                  }
+
+                  { this.state.token 
+                      ? <li className="nav-item" style={{margin: "2px"}}>
+                          <button style={{color: 'white'}} className="nav-link btn btn-primary btn-block" onClick={this.handleCreatePost}>Create Post</button>
+                        </li>
+                      : null
+                  }
+
+                  { this.state.token 
+                      ? <li className="nav-item" style={{margin: "2px"}}>
+                          <button style={{color: 'white'}} className="nav-link btn btn-primary btn-block" onClick={this.showMyPosts}>My Posts</button>
                         </li>
                       : null
                   }
@@ -168,13 +203,14 @@ export default class App extends Component {
             </div>
           </nav>
 
-          <div className="auth-wrapper">
+          <div className="auth-wrapper" style={{height: "100%", overflowY:"scroll"}}>
             <div className="auth-inner">
               <Switch>
                 <Route exact path='/'exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />} />
                 <Route exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />}/>
                 <Route exact path="/sign-up" render={(props, history) => <SignUp {...props} onSignup={this.handleSignup} history={history} />}/>
                 <Route exact path='/posts'render={(props) => <Posts {...props} getUser={this.getUser} />}/>
+                <Route exact path='/create-post'render={(props) => <CreatePost {...props} getUser={this.getUser} />}/>
               </Switch>
             </div>
           </div>
