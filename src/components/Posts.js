@@ -45,10 +45,10 @@ export default class Posts extends Component {
         const noPosts = !this.state.loadingPosts && this.state.posts.length === 0;
         const loadingPosts = this.state.loadingPosts;
         return(
-            <div style={{textAlign: "center"}}>
+            <div className="container" style={{overflowY: "scroll"}}>
                 <ul>
-                    {loadingPosts && <div style={{position: "absolute" , right: "480px", top: "349px"}}>Loading posts...</div>}
-                    {noPosts && <div style={{position: "absolute" , right: "432px", top: "349px"}}>You do not have any posts.</div>}
+                    {loadingPosts && <div style={{position: "absolute" , right: "540px", top: "349px"}}>Loading posts...</div>}
+                    {noPosts && <div style={{position: "absolute" , right: "540px", top: "349px"}}>You do not have any posts.</div>}
                     {this.state.posts.map((post, index) => {
                         return <Post key={index} post={post} style={{backgroundColor: "white"}}/>;
                     })}
