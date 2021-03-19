@@ -15,6 +15,9 @@ export default class App extends Component {
         id: null,
         email: null,
         name: null,
+        email_verified_at: null,
+        created_at: null,
+        updated_at: null
       },
       token: null
     }
@@ -23,7 +26,7 @@ export default class App extends Component {
     this.handleSignup = this.handleSignup.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.getUser=this.getUser.bind(this);
-
+    this.clearState=this.clearState.bind(this);
   }
 
   componentDidMount() {
@@ -33,7 +36,10 @@ export default class App extends Component {
             user: {
               id: userData.user.id,
               email: userData.user.email,
-              name: userData.user.name
+              name: userData.user.name,
+              email_verified_atat: userData.user.email_verified_at,
+              created_at: userData.user.created_at,
+              updated_at: userData.user.updated_at
             },
             token: userData.token
         });
@@ -43,6 +49,9 @@ export default class App extends Component {
             id: null,
             email: null,
             name: null,
+            email_verified_at: null,
+            created_at: null,
+            updated_at: null
           },
           token: null
         });
@@ -60,7 +69,10 @@ export default class App extends Component {
       user: {
         id: responseData.id,
         email: responseData.email,
-        name: responseData.name
+        name: responseData.name,
+        email_verified_at: responseData.user.email_verified_at,
+        created_at: responseData.user.created_at,
+        updated_at: responseData.user.updated_at
       },
       token: responseData.access_token
     });
@@ -69,19 +81,44 @@ export default class App extends Component {
 
   //fix logout
   handleLogout() {
-    axios.get('http://127.0.0.1/api/auth/logout', {
+    console.log("user: ", this.state.user)
+    const config = {
+      headers: { Authorization: `Bearer ${this.state.token}` }
+    };
+    
+    axios.post('http://127.0.0.1/api/auth/logout', {
       id: this.state.user.id,
       name: this.state.user.name,
-      email: this.state.user.email
-    })
+      email: this.state.user.email,
+      email_verified_at: this.state.user.email_verified_at,
+      created_at: this.state.user.created_at,
+      updated_at: this.state.user.updated_at
+    }, config)
     .then((response) => {
-      console.log("response: ", response);
-      // const responseData = response.data;
-      // this.props.onLogin(responseData);
-      // window.location.href = "/log-in";
+      if(response.status === 200) {
+        this.clearState();
+        window.location.href = "/log-in";
+      } else {
+        console.error("Error while logging out. Please investigate.")
+      }
     })
     .catch((error) => {
       console.log(error);
+    });
+  }
+
+  clearState() {
+    localStorage.removeItem("localUserData");
+    this.setState({
+      user: {
+        id: null,
+        email: null,
+        name: null,
+        email_verified_at: null,
+        created_at: null,
+        updated_at: null
+      },
+      token: null
     });
   }
 
@@ -134,7 +171,7 @@ export default class App extends Component {
           <div className="auth-wrapper">
             <div className="auth-inner">
               <Switch>
-                <Route exact path='/' component={Login} />
+                <Route exact path='/'exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />} />
                 <Route exact path="/log-in"  render={(props, history) => <Login {...props} onLogin={this.handleLogin} history={history} />}/>
                 <Route exact path="/sign-up" render={(props, history) => <SignUp {...props} onSignup={this.handleSignup} history={history} />}/>
                 <Route exact path='/posts'render={(props) => <Posts {...props} getUser={this.getUser} />}/>
