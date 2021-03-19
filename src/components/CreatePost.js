@@ -52,7 +52,7 @@ export default class CreatePost extends Component {
                 const postId = response.data.id;
                 this.uploadFiles(postId).then(responses => {
                     console.log('responses', responses);
-                    // window.location.href = "/posts";
+                    window.location.href = "/posts";
 
                 }).catch(error => console.error(error));
             }).catch((error) => {
