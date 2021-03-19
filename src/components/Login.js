@@ -8,7 +8,8 @@ export default class Login extends Component {
             email: '',
             password: '',
             rememberMe: false,
-            incorrectCredentials: false
+            incorrectCredentials: false,
+            disableForm: false
         };
     
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -29,7 +30,8 @@ export default class Login extends Component {
     handleSubmit(event) {
         event.preventDefault();
         this.setState({
-            incorrectCredentials: false
+            incorrectCredentials: false,
+            disableForm: true
         })
         axios.post('http://127.0.0.1/api/auth/login', {
             email: this.state.email,
@@ -39,11 +41,15 @@ export default class Login extends Component {
           .then((response) => {
             const responseData = response.data;
             this.props.onLogin(responseData);
+            this.setState({
+                disableForm: false
+            })
             window.location.href = "/posts";
           })
           .catch((error) => {
             this.setState({
-                incorrectCredentials: true
+                incorrectCredentials: true,
+                disableForm: false
             })
             console.log(error);
           });
@@ -56,12 +62,12 @@ export default class Login extends Component {
 
             <div className="form-group">
                 <label>Email address</label>
-                <input type="email" value={this.state.email} onChange={this.handleEmailChange} className="form-control" placeholder="Enter email" />
+                <input type="email" disabled={this.state.disableForm} value={this.state.email} onChange={this.handleEmailChange} className="form-control" placeholder="Enter email" />
             </div>
 
             <div className="form-group">
                 <label>Password</label>
-                <input type="password" value={this.state.password} onChange={this.handlePasswordChange} className="form-control" placeholder="Enter password" />
+                <input type="password" disabled={this.state.disableForm} value={this.state.password} onChange={this.handlePasswordChange} className="form-control" placeholder="Enter password" />
             </div>
 
             <div className="form-group">
@@ -71,7 +77,7 @@ export default class Login extends Component {
                 </div>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-block">Submit</button>
+            <button type="submit"  disabled={this.state.disableForm} className="btn btn-primary btn-block">Submit</button>
             {this.state.incorrectCredentials && <p style={{color: "red"}}>Credentials incorrect. Please try again.</p>}
         </form>
         );

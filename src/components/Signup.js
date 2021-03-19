@@ -9,7 +9,8 @@ export default class SignUp extends Component {
             firstName: '',
             lastName: '',
             email: '',
-            password: ''
+            password: '',
+            disableForm: false
         };
     
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -33,7 +34,9 @@ export default class SignUp extends Component {
     }
     handleSubmit(event) {
         event.preventDefault();
-
+        this.setState({
+            disableForm: true
+        })
         axios.post('http://127.0.0.1/api/auth/signup', {
             name: `${this.state.firstName} ${this.state.lastName}` ,
             email: this.state.email,
@@ -43,9 +46,15 @@ export default class SignUp extends Component {
             const responseData = response.data;
             console.log('responseData: ', responseData);
             this.props.onSignup(responseData);
+            this.setState({
+                disableForm: false
+            })
             window.location.href = "/log-in";
           })
           .catch((error) => {
+            this.setState({
+                disableForm: false
+            })
             console.log(error);
           });
     }
@@ -57,25 +66,25 @@ export default class SignUp extends Component {
 
                 <div className="form-group">
                     <label>First name</label>
-                    <input type="text" value={this.state.firstName} onChange={this.handleFirstNameChange} className="form-control" placeholder="First name" />
+                    <input type="text"  disabled={this.state.disableForm} value={this.state.firstName} onChange={this.handleFirstNameChange} className="form-control" placeholder="First name" />
                 </div>
 
                 <div className="form-group">
                     <label>Last name</label>
-                    <input type="text" value={this.state.lastName} onChange={this.handleLastNameChange} className="form-control" placeholder="Last name" />
+                    <input type="text"  disabled={this.state.disableForm} value={this.state.lastName} onChange={this.handleLastNameChange} className="form-control" placeholder="Last name" />
                 </div>
 
                 <div className="form-group">
                     <label>Email address</label>
-                    <input type="email" value={this.state.email} onChange={this.handleEmailChange} className="form-control" placeholder="Enter email" />
+                    <input type="email"  disabled={this.state.disableForm} value={this.state.email} onChange={this.handleEmailChange} className="form-control" placeholder="Enter email" />
                 </div>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" value={this.state.password} onChange={this.handlePasswordChange} className="form-control" placeholder="Enter password" />
+                    <input type="password"  disabled={this.state.disableForm} value={this.state.password} onChange={this.handlePasswordChange} className="form-control" placeholder="Enter password" />
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+                <button type="submit"  disabled={this.state.disableForm} className="btn btn-primary btn-block">Sign Up</button>
             </form>
         );
     }

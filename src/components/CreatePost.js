@@ -8,7 +8,8 @@ export default class CreatePost extends Component {
             title: '',
             description: '',
             attachments: 0,
-            files: []
+            files: [],
+            disableForm: false
         };
     
         this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -36,6 +37,9 @@ export default class CreatePost extends Component {
 
     handleSubmit(event) {
       event.preventDefault();
+      this.setState({
+        disableForm: true
+        })
         const userId = this.props.getUser().id;
         const config = {
             headers: { 
@@ -55,7 +59,13 @@ export default class CreatePost extends Component {
                     window.location.href = "/posts";
 
                 }).catch(error => console.error(error));
+                this.setState({
+                    disableForm: false
+                    })
             }).catch((error) => {
+                this.setState({
+                    disableForm: false
+                    })
                 console.log(error);
             });
     }
@@ -89,21 +99,21 @@ export default class CreatePost extends Component {
 
             <div className="form-group" style={{textAlign: "left"}}>
                 <label>Title</label>
-                <input type="text" value={this.state.title} onChange={this.handleTitleChange} className="form-control" placeholder="Enter title for post" />
+                <input type="text" disabled={this.state.disableForm} value={this.state.title} onChange={this.handleTitleChange} className="form-control" placeholder="Enter title for post" />
             </div>
 
             <div className="form-group" style={{textAlign: "left"}}>
                 <label>Description</label>
-                <input type="text" value={this.state.description} onChange={this.handleDescriptionChange} className="form-control" placeholder="Enter description for post" />
+                <input type="text" disabled={this.state.disableForm} value={this.state.description} onChange={this.handleDescriptionChange} className="form-control" placeholder="Enter description for post" />
             </div>
 
             <div className="form-group">
                 <label>File</label>
-                <input type="file" onChange={this.onFileChange} multiple/>
+                <input type="file" disabled={this.state.disableForm} onChange={this.onFileChange} multiple/>
             </div>
 
 
-            <button type="submit" className="btn btn-primary btn-block">Submit</button>
+            <button type="submit" disabled={this.state.disableForm} className="btn btn-primary btn-block">Submit</button>
         </form>
         );
     }
